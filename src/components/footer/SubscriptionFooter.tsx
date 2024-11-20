@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
-import { Button } from "../../../temp/button";
-import { Input } from "../../../temp/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 export default function Subscription() {
   const [email, setEmail] = useState("");

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Send, Upload, Check } from "lucide-react";
-import { Button } from "../../../temp/button";
-import { Input } from "../../../temp/input";
-import Textarea from "../../../temp/textarea";
-import { Checkbox } from "../../../temp/checkbox";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ContactFormProps {
   option: string;
