@@ -12,7 +12,7 @@ interface CardProps {
   className?: string;
 }
 
-export function Card({ title, children, className = "" }: CardProps) {
+export function LightCard({ title, children, className = "" }: CardProps) {
   return (
     <UICard className={`bg-gray-800 border-gray-700 ${className}`}>
       {title && (
