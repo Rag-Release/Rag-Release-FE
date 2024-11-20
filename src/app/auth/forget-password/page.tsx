@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, ArrowLeft } from "lucide-react";
-import { Button } from "../../../../temp/button";
-import { Input } from "../../../../temp/input";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");

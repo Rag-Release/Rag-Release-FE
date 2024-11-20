@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { LogIn, Mail } from "lucide-react";
-import { Button } from "../../../../temp/button";
-import { Input } from "../../../../temp/input";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({

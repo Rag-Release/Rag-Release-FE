@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { LogIn, Mail } from "lucide-react";
-import { Button } from "../../../../temp/button";
-import { Input } from "../../../../temp/input";
-import { Checkbox } from "../../../../temp/checkbox";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Sign In Form Component
 const SignInForm = () => {
