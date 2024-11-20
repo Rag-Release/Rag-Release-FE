@@ -16,11 +16,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -32,10 +30,10 @@ import {
 import { format } from "date-fns";
 import {
   CheckCircle,
-  MoreHorizontal,
   Info,
-  XCircle,
+  MoreHorizontal,
   Trash2,
+  XCircle,
 } from "lucide-react";
 import { useState } from "react";
 

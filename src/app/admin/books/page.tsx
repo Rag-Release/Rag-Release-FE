@@ -3,23 +3,18 @@
 import { format } from "date-fns";
 import Link from "next/link";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
+  AlertCircle,
   Book,
-  CheckCircle,
-  ChevronDown,
-  Edit,
-  Info,
-  Search,
-  Trash2,
-  XCircle,
   Edit3,
   Eye,
+  Info,
   MoreHorizontal,
   Star,
-  AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,16 +22,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";

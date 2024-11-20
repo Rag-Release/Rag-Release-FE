@@ -1,10 +1,8 @@
 "use client";
 
+import { Book, Eye, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
-import { Book, Eye, MoreHorizontal, ShoppingCart, User } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,

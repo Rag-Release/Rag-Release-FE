@@ -1,28 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import {
-  ArrowUp,
   ArrowDown,
+  ArrowUp,
   CreditCard,
   Heart,
-  Home,
-  MapPin,
   Package,
-  ShoppingCart,
   Star,
-  User,
 } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +22,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 
 type AccountTypeKeys =
   | "basic"

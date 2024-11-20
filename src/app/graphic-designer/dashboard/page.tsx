@@ -1,43 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Bar, Line } from "react-chartjs-2";
-import {
-  Book,
-  Briefcase,
-  DollarSign,
-  Star,
-  Palette,
-  Clock,
-  ChevronRight,
-  Plus,
-} from "lucide-react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { LightCard } from "../../../components/card/LightCard";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { motion } from "framer-motion";
+import {
+  Book,
+  Briefcase,
+  ChevronRight,
+  Clock,
+  DollarSign,
+  Palette,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { Bar, Line } from "react-chartjs-2";
+import { LightCard } from "../../../components/card/LightCard";
 
 ChartJS.register(
   CategoryScale,

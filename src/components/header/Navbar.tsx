@@ -32,7 +32,7 @@ import {
 
 export default function Navbar({
   isSignedIn = true,
-  userRole = "common", // Possible values: "common", "admin", "designer", "reviewer"
+  userRole = "author", // Possible values: "common", "admin", "designer", "reviewer"
 }: {
   isSignedIn?: boolean;
   userRole?: string;

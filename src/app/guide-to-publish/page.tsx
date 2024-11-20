@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Edit,
-  BookOpen,
-  Building,
-  User,
   Barcode,
+  BookOpen,
+  Edit,
   Palette,
   Printer,
   ShoppingBag,
 } from "lucide-react";
+import { useState } from "react";
 
 const steps = [
   {

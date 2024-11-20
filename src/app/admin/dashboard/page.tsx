@@ -1,35 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Bar, Line } from "react-chartjs-2";
 import {
-  Book,
-  Users,
-  ShoppingCart,
-  Heart,
-  PenTool,
-  Star,
-  BarChart2,
-  Settings,
-  LogOut,
-  ChevronDown,
-  Search,
-} from "lucide-react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
-  PointElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import { Book, ShoppingCart, Users } from "lucide-react";
+import { useState } from "react";
+import { Bar, Line } from "react-chartjs-2";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -38,14 +23,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -53,7 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 ChartJS.register(
   CategoryScale,

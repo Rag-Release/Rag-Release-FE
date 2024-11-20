@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { LogIn, Mail } from "lucide-react";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import { LogIn } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 // Sign In Form Component
 const SignInForm = () => {

@@ -1,9 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import ContactForm from "./contact-form";
-import SuccessMessage from "./success-message";
 import {
   Select,
   SelectContent,
@@ -11,6 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import ContactForm from "./contact-form";
+import SuccessMessage from "./success-message";
 const contactOptions = [
   "I want to publish a book",
   "I'm an author looking for representation",

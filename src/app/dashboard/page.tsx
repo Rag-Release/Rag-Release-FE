@@ -1,17 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { ShoppingCart, User } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 
 export default function Component() {
   const recentBooks = [

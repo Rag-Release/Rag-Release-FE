@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Send, Upload, Check } from "lucide-react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { motion } from "framer-motion";
+import { Check, Send, Upload } from "lucide-react";
+import { useState } from "react";
 
 interface ContactFormProps {
   option: string;

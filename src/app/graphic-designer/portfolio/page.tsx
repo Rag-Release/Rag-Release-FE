@@ -1,28 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Star,
-  Download,
-} from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
+import { useState } from "react";
 import { LightCard } from "../../../components/card/LightCard";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface PortfolioItem {

@@ -1,32 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
-  Bold,
-  Italic,
-  Underline,
-  List,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
-  LinkIcon,
+  Bold,
   Image,
-  Undo,
+  Italic,
+  LinkIcon,
+  List,
   Redo,
   Save,
   Send,
-  ShoppingCart,
-  User,
+  Underline,
+  Undo,
   Users,
 } from "lucide-react";
+import { useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,10 +38,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
 import { getYDoc } from "@/lib/collaboration";
-import LinkExtension from "@tiptap/extension-link";
 import ImageExtension from "@tiptap/extension-image";
+import LinkExtension from "@tiptap/extension-link";
 
 const { ydoc, provider } = getYDoc();
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { LogIn, Mail } from "lucide-react";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import { LogIn } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
