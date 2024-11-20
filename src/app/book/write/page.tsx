@@ -50,10 +50,10 @@ const { ydoc, provider } = getYDoc();
 //   signaling: ["ws://localhost:4444"], // Your local signaling server
 // });
 
-const awareness = provider.awareness;
+// const awareness = provider.awareness;
 
 export default function Component() {
-  const [activeUsers, setActiveUsers] = useState([
+  const [activeUsers] = useState([
     { name: "John Smith", role: "Author", color: "#ff0000" },
     { name: "Sarah Wilson", role: "Reviewer", color: "#00ff00" },
   ]);

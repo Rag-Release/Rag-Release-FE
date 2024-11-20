@@ -3,7 +3,7 @@
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Book, Edit, Send, ShoppingBag } from "lucide-react";
-import { useParams, useRouter } from "next/navigation"; // Use next/navigation instead of next/router
+import { useParams } from "next/navigation"; // Use next/navigation instead of next/router
 import { useState } from "react";
 import { LightCard } from "../../../../components/card/LightCard";
 
@@ -118,8 +118,6 @@ const bookshops: Bookshop[] = [
 ];
 
 export default function BookApprovalManagement() {
-  const router = useRouter();
-
   const { id } = useParams(); // Replace router.query.id
   const { toast } = useToast();
 
@@ -173,6 +171,7 @@ export default function BookApprovalManagement() {
         variant: "default",
       });
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error",
         description: "Failed to submit review.",

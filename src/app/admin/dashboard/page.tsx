@@ -43,8 +43,6 @@ ChartJS.register(
 );
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard");
-
   const salesData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [

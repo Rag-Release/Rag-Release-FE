@@ -44,7 +44,7 @@ const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
 
 export default function Component() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [userData, setUserData] = useState({
+  const [userData] = useState({
     name: "Helene Engels",
     email: "helene@example.com",
     accountType: "pro",

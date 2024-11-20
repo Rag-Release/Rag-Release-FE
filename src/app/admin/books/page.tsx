@@ -204,13 +204,6 @@ const initialBooks: Book[] = [
   },
 ];
 
-// Define a mapping for category colors
-const categoryColors = {
-  Fiction: "bg-blue-500 text-white",
-  Business: "bg-green-500 text-white",
-  Technology: "bg-purple-500 text-white",
-};
-
 // Define a mapping for status colors
 const statusColors = {
   New: "bg-yellow-500 text-white",
@@ -248,7 +241,7 @@ const statusColors = {
 
 export default function BookManagementAdmin() {
   const [books, setBooks] = useState<Book[]>(initialBooks);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -314,41 +307,41 @@ export default function BookManagementAdmin() {
       book.genre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleApprove = (id: string) => {
-    setBooks(
-      books.map((book) =>
-        book.id === id
-          ? {
-              ...book,
-              status: "Approved",
-              dateApprovedRejected: new Date(),
-              approvalHistory: [
-                ...book.approvalHistory,
-                { action: "Approved", date: new Date() },
-              ],
-            }
-          : book
-      )
-    );
-  };
+  // const handleApprove = (id: string) => {
+  //   setBooks(
+  //     books.map((book) =>
+  //       book.id === id
+  //         ? {
+  //             ...book,
+  //             status: "Approved",
+  //             dateApprovedRejected: new Date(),
+  //             approvalHistory: [
+  //               ...book.approvalHistory,
+  //               { action: "Approved", date: new Date() },
+  //             ],
+  //           }
+  //         : book
+  //     )
+  //   );
+  // };
 
-  const handleReject = (id: string) => {
-    setBooks(
-      books.map((book) =>
-        book.id === id
-          ? {
-              ...book,
-              status: "Rejected",
-              dateApprovedRejected: new Date(),
-              approvalHistory: [
-                ...book.approvalHistory,
-                { action: "Rejected", date: new Date() },
-              ],
-            }
-          : book
-      )
-    );
-  };
+  // const handleReject = (id: string) => {
+  //   setBooks(
+  //     books.map((book) =>
+  //       book.id === id
+  //         ? {
+  //             ...book,
+  //             status: "Rejected",
+  //             dateApprovedRejected: new Date(),
+  //             approvalHistory: [
+  //               ...book.approvalHistory,
+  //               { action: "Rejected", date: new Date() },
+  //             ],
+  //           }
+  //         : book
+  //     )
+  //   );
+  // };
 
   // const handleDelete = (id: string) => {
   //   setBooks(books.filter((book) => book.id !== id));

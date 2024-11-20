@@ -15,7 +15,6 @@ import {
   PenTool,
   Star,
   LayoutDashboard,
-  CircleUser,
   SquarePen,
   ListTodo,
   BookOpenCheck,
@@ -51,12 +50,12 @@ export default function Navbar({
     }
   };
 
-  const toggleDropdown = () => {
-    if (window.innerWidth >= 768) {
-      // Only toggle on large screens
-      setDropdownOpen(!dropdownOpen);
-    }
-  };
+  // const toggleDropdown = () => {
+  //   if (window.innerWidth >= 768) {
+  //     // Only toggle on large screens
+  //     setDropdownOpen(!dropdownOpen);
+  //   }
+  // };
 
   const renderDropdownMenu = () => {
     switch (userRole) {

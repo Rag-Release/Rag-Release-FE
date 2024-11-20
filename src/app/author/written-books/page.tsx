@@ -9,10 +9,8 @@ import {
   Eye,
   MoreHorizontal,
   Pencil,
-  ShoppingCart,
   Star,
   Trash2,
-  User,
 } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

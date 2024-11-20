@@ -172,20 +172,20 @@ export default function WorksToDo() {
   const [designs, setDesigns] = useState<Design[]>(initialDesigns);
   const [filter, setFilter] = useState("all");
 
-  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const newDesign: Design = {
-        id: (designs.length + 1).toString(),
-        title: "New Design",
-        author: "Unknown Author",
-        coverImage: URL.createObjectURL(file),
-        status: "Draft",
-        feedback: [],
-      };
-      setDesigns([...designs, newDesign]);
-    }
-  };
+  //   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     const file = event.target.files?.[0];
+  //     if (file) {
+  //       const newDesign: Design = {
+  //         id: (designs.length + 1).toString(),
+  //         title: "New Design",
+  //         author: "Unknown Author",
+  //         coverImage: URL.createObjectURL(file),
+  //         status: "Draft",
+  //         feedback: [],
+  //       };
+  //       setDesigns([...designs, newDesign]);
+  //     }
+  //   };
 
   const handleStatusChange = (id: string, newStatus: Design["status"]) => {
     setDesigns(
@@ -214,22 +214,22 @@ export default function WorksToDo() {
 
   const [uploadingDesign, setUploadingDesign] = useState<string | null>(null);
 
-  const handleFileUpload = (
-    designId: string,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Here you would typically upload the file to your server
-      console.log(`Uploading file for design ${designId}:`, file.name);
-      // For demonstration, we'll just show a success message
-      setUploadingDesign(designId);
-      setTimeout(() => {
-        setUploadingDesign(null);
-        // You might want to update the design's status or image here
-      }, 2000);
-    }
-  };
+  //   const handleFileUpload = (
+  //     designId: string,
+  //     event: React.ChangeEvent<HTMLInputElement>
+  //   ) => {
+  //     const file = event.target.files?.[0];
+  //     if (file) {
+  //       // Here you would typically upload the file to your server
+  //       console.log(`Uploading file for design ${designId}:`, file.name);
+  //       // For demonstration, we'll just show a success message
+  //       setUploadingDesign(designId);
+  //       setTimeout(() => {
+  //         setUploadingDesign(null);
+  //         // You might want to update the design's status or image here
+  //       }, 2000);
+  //     }
+  //   };
 
   const filteredDesigns =
     filter === "all"
