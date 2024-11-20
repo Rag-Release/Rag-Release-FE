@@ -1,3 +1,4 @@
+import React from "react";
 import PrivacyPolicyContent from "@/components/privacy-policy/content";
 import PrivacyPolicyFooter from "@/components/privacy-policy/footer";
 import PrivacyPolicyHeader from "@/components/privacy-policy/header";

@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import Collaboration from "@tiptap/extension-collaboration";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";

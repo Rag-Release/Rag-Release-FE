@@ -1,3 +1,4 @@
+import React from "react";
 import Footer from "@/components/footer/Footer";
 import Subscription from "@/components/footer/SubscriptionFooter";
 import Navbar from "@/components/header/Navbar";
