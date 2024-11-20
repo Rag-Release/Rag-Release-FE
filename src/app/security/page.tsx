@@ -9,7 +9,7 @@ import {
   FileCheck,
   Globe,
 } from "lucide-react";
-import { Card } from "@/components/card/Card";
+import { LightCard } from "../../components/card/LightCard";
 
 const securityFeatures = [
   {
@@ -87,7 +87,7 @@ export default function SecurityPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * index }}
             >
-              <Card className="h-full">
+              <LightCard className="h-full">
                 <div className="flex flex-col items-center text-center p-6">
                   <feature.icon className="w-12 h-12 text-green-400 mb-4" />
                   <h3 className="text-xl font-semibold mb-4">
@@ -95,7 +95,7 @@ export default function SecurityPage() {
                   </h3>
                   <p className="text-gray-300">{feature.description}</p>
                 </div>
-              </Card>
+              </LightCard>
             </motion.div>
           ))}
         </motion.div>
@@ -106,7 +106,7 @@ export default function SecurityPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <Card>
+          <LightCard>
             <div className="p-8">
               <h2 className="text-3xl font-bold text-center mb-8">
                 Industry-Leading Security Standards
@@ -141,7 +141,7 @@ export default function SecurityPage() {
                 </div>
               </div>
             </div>
-          </Card>
+          </LightCard>
         </motion.div>
 
         {/* CTA Section */}
@@ -151,7 +151,7 @@ export default function SecurityPage() {
           transition={{ delay: 1 }}
           className="text-center mt-16"
         >
-          <Card>
+          <LightCard>
             <div className="p-8">
               <h2 className="text-2xl font-bold mb-4">
                 Ready to Publish Securely?
@@ -164,7 +164,7 @@ export default function SecurityPage() {
                 Start Publishing Today
               </button>
             </div>
-          </Card>
+          </LightCard>
         </motion.div>
       </div>
     </div>
