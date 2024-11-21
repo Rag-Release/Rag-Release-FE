@@ -18,6 +18,10 @@ import {
   SquarePen,
   ListTodo,
   BookOpenCheck,
+  CircleUserRound,
+  ShoppingBag,
+  CircleFadingArrowUp,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +35,7 @@ import {
 
 export default function Navbar({
   isSignedIn = true,
-  userRole = "author", // Possible values: "common", "admin", "designer", "reviewer"
+  userRole = "author", // Possible values: "common", "admin", "designer", "reviewer", author
 }: {
   isSignedIn?: boolean;
   userRole?: string;
@@ -64,14 +68,30 @@ export default function Navbar({
           <>
             <DropdownMenuItem>
               <Link
+                href="/account"
+                className={`flex items-center ${
+                  activeTab === "account" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("account")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleUserRound className="mr-2 h-4 w-4" />
+                  Account{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
                 href="/admin/dashboard"
                 className={`flex items-center ${
                   activeTab === "dashboard" ? "text-green-600" : "text-ghost"
                 }`}
                 onClick={() => handleTabClick("dashboard")}
               >
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                Dashboard
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -82,8 +102,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("users")}
               >
-                <Users className="mr-2 h-4 w-4" />
-                Users
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Users className="mr-2 h-4 w-4" />
+                  Users{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -94,8 +116,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("books")}
               >
-                <Book className="mr-2 h-4 w-4" />
-                Books
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Book className="mr-2 h-4 w-4" />
+                  Books{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
           </>
@@ -106,14 +130,30 @@ export default function Navbar({
           <>
             <DropdownMenuItem>
               <Link
+                href="/account"
+                className={`flex items-center ${
+                  activeTab === "account" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("account")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleUserRound className="mr-2 h-4 w-4" />
+                  Account{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
                 href="/graphic-designer/dashboard"
                 className={`flex items-center ${
                   activeTab === "dashboard" ? "text-green-600" : "text-ghost"
                 }`}
                 onClick={() => handleTabClick("dashboard")}
               >
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                Dashboard
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -124,8 +164,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("works-todo")}
               >
-                <PenTool className="mr-2 h-4 w-4" />
-                Works ToDo
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <PenTool className="mr-2 h-4 w-4" />
+                  Works ToDo{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -136,8 +178,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("portfolio")}
               >
-                <Star className="mr-2 h-4 w-4" />
-                Portfolio
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Star className="mr-2 h-4 w-4" />
+                  Portfolio{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
           </>
@@ -148,14 +192,30 @@ export default function Navbar({
           <>
             <DropdownMenuItem>
               <Link
+                href="/account"
+                className={`flex items-center ${
+                  activeTab === "account" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("account")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleUserRound className="mr-2 h-4 w-4" />
+                  Account{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
                 href="/reviewer/reviews"
                 className={`flex items-center ${
                   activeTab === "reviews" ? "text-green-600" : "text-ghost"
                 }`}
                 onClick={() => handleTabClick("reviews")}
               >
-                <Heart className="mr-2 h-4 w-4" />
-                My Reviews
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Heart className="mr-2 h-4 w-4" />
+                  My Reviews{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -166,8 +226,90 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("feedback")}
               >
-                <Star className="mr-2 h-4 w-4" />
-                Feedback
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Star className="mr-2 h-4 w-4" />
+                  Feedback{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+          </>
+        );
+
+      case "author":
+        return (
+          <>
+            <DropdownMenuItem>
+              <Link
+                href="/account"
+                className={`flex items-center ${
+                  activeTab === "account" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("account")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleUserRound className="mr-2 h-4 w-4" />
+                  Account{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href="/author/write"
+                className={`flex items-center ${
+                  activeTab === "write" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("write")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <SquarePen className="mr-2 h-4 w-4" />
+                  Write Book{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href="/author/written-books"
+                className={`flex items-center ${
+                  activeTab === "written-books"
+                    ? "text-green-600"
+                    : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("my-books")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Book className="mr-2 h-4 w-4" />
+                  My Books{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href="/author/designer-work-review"
+                className={`flex items-center ${
+                  activeTab === "designer-work-review"
+                    ? "text-green-600"
+                    : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("designer-work-review")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <BookOpenCheck className="mr-2 h-4 w-4" />
+                  Cover Page Review{" "}
+                </Button>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href="/author/book-review"
+                className={`flex items-center ${
+                  activeTab === "book-review" ? "text-green-600" : "text-ghost"
+                }`}
+                onClick={() => handleTabClick("book-review")}
+              >
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <BookOpenCheck className="mr-2 h-4 w-4" />
+                  Book Review{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
           </>
@@ -185,7 +327,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("account")}
               >
-                Account
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleUserRound className="mr-2 h-4 w-4" />
+                  Account{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -196,7 +341,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("purchases")}
               >
-                Purchases
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <ShoppingBag className="mr-2 h-4 w-4" />
+                  Purchases
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -207,7 +355,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("wishlist")}
               >
-                Wishlist
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <Heart className="mr-2 h-4 w-4" />
+                  Wishlist{" "}
+                </Button>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -220,7 +371,10 @@ export default function Navbar({
                 }`}
                 onClick={() => handleTabClick("upgrade-account")}
               >
-                Upgrade Account
+                <Button variant="ghost" className="hover:bg-transparent">
+                  <CircleFadingArrowUp className="mr-2 h-4 w-4" />
+                  Upgrade Account
+                </Button>
               </Link>
             </DropdownMenuItem>
           </>
@@ -338,7 +492,13 @@ export default function Navbar({
                           className="hover:bg-green-200"
                           onClick={() => handleTabClick("sign-out")}
                         >
-                          Sign Out
+                          <Button
+                            variant="ghost"
+                            className="hover:bg-transparent"
+                          >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Sign Out
+                          </Button>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -409,10 +569,54 @@ export default function Navbar({
                           Upgrade Account
                         </Button>
                       </Link>
+                      <Link href="/sign-out">
+                        <Button variant="ghost" className="w-full text-left">
+                          Sign Out
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                  {userRole === "author" && (
+                    <>
+                      <Link href="/account">
+                        <Button variant="ghost" className="w-full text-left">
+                          Account
+                        </Button>
+                      </Link>
+                      <Link href="/author/write">
+                        <Button variant="ghost" className="w-full text-left">
+                          Write Book
+                        </Button>
+                      </Link>
+                      <Link href="/author/written-books">
+                        <Button variant="ghost" className="w-full text-left">
+                          My Books
+                        </Button>
+                      </Link>
+                      <Link href="/author/designer-work-review">
+                        <Button variant="ghost" className="w-full text-left">
+                          Cover Page Review
+                        </Button>
+                      </Link>
+                      <Link href="/author/book-review">
+                        <Button variant="ghost" className="w-full text-left">
+                          Book Review
+                        </Button>
+                      </Link>{" "}
+                      <Link href="/sign-out">
+                        <Button variant="ghost" className="w-full text-left">
+                          Sign Out
+                        </Button>
+                      </Link>
                     </>
                   )}
                   {userRole === "admin" && (
                     <>
+                      <Link href="/account">
+                        <Button variant="ghost" className="w-full text-left">
+                          Account
+                        </Button>
+                      </Link>
                       <Link href="/admin/dashboard">
                         <Button variant="ghost" className="w-full text-left">
                           Dashboard
@@ -428,10 +632,20 @@ export default function Navbar({
                           Books
                         </Button>
                       </Link>
+                      <Link href="/sign-out">
+                        <Button variant="ghost" className="w-full text-left">
+                          Sign Out
+                        </Button>
+                      </Link>
                     </>
                   )}
                   {userRole === "designer" && (
                     <>
+                      <Link href="/account">
+                        <Button variant="ghost" className="w-full text-left">
+                          Account
+                        </Button>
+                      </Link>
                       <Link href="/graphic-designer/dashboard">
                         <Button variant="ghost" className="w-full text-left">
                           Dashboard
@@ -447,10 +661,20 @@ export default function Navbar({
                           Portfolio
                         </Button>
                       </Link>
+                      <Link href="/sign-out">
+                        <Button variant="ghost" className="w-full text-left">
+                          Sign Out
+                        </Button>
+                      </Link>
                     </>
                   )}
                   {userRole === "reviewer" && (
                     <>
+                      <Link href="/account">
+                        <Button variant="ghost" className="w-full text-left">
+                          Account
+                        </Button>
+                      </Link>
                       <Link href="/reviewer/reviews">
                         <Button variant="ghost" className="w-full text-left">
                           My Reviews
@@ -459,6 +683,11 @@ export default function Navbar({
                       <Link href="/reviewer/feedback">
                         <Button variant="ghost" className="w-full text-left">
                           Feedback
+                        </Button>
+                      </Link>
+                      <Link href="/sign-out">
+                        <Button variant="ghost" className="w-full text-left">
+                          Sign Out
                         </Button>
                       </Link>
                     </>

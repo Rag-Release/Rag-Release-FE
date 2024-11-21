@@ -108,16 +108,8 @@ export default function DesignerWorkReview() {
       : works.filter((work) => work.status.toLowerCase() === activeTab);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Work Review Dashboard
-          </h1>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+      <main className="container mx-auto max-w-6xl px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

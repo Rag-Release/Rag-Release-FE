@@ -95,7 +95,7 @@ export default function Component() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <main className="container mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Wishlist Books</h1>
