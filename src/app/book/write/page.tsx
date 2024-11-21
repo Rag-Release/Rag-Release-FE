@@ -16,7 +16,6 @@ import {
   Redo,
   Save,
   Send,
-  Underline,
   Undo,
   Users,
 } from "lucide-react";
@@ -41,7 +40,7 @@ import {
 import { getYDoc } from "@/lib/collaboration";
 import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
-
+import Underline from "@tiptap/extension-underline";
 const { ydoc, provider } = getYDoc();
 
 // // Initialize Yjs
@@ -63,6 +62,7 @@ export default function Component() {
       StarterKit,
       Collaboration.configure({ document: ydoc }),
       CollaborationCursor.configure({ provider }),
+      Underline,
       LinkExtension,
       ImageExtension,
     ],
@@ -192,7 +192,7 @@ export default function Component() {
                           editor?.isActive("underline") ? "bg-gray-800" : ""
                         }
                       >
-                        <Underline className="h-4 w-4" />
+                        {/* <Underline className="h-4 w-4" /> */}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Underline</TooltipContent>
