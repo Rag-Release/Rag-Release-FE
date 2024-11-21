@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -240,7 +240,7 @@ const statusColors = {
 };
 
 export default function BookManagementAdmin() {
-  const [books, setBooks] = useState<Book[]>(initialBooks);
+  const [books] = useState<Book[]>(initialBooks);
   const [searchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);

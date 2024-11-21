@@ -212,7 +212,7 @@ export default function WorksToDo() {
     );
   };
 
-  const [uploadingDesign, setUploadingDesign] = useState<string | null>(null);
+  const [uploadingDesign] = useState<string | null>(null);
 
   //   const handleFileUpload = (
   //     designId: string,

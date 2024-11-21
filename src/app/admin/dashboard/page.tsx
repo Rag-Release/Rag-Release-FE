@@ -12,7 +12,6 @@ import {
   Tooltip,
 } from "chart.js";
 import { Book, ShoppingCart, Users } from "lucide-react";
-import { useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 
 import {
