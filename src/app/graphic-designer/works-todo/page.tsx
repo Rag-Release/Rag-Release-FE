@@ -285,7 +285,8 @@ export default function WorksToDo() {
                   </DialogHeader>
                   <div className="space-y-4">
                     <p>
-                      <strong>Dimensions:</strong> 6" x 9" (15.24 cm x 22.86 cm)
+                      <strong>Dimensions:</strong> 6&quot; x 9&quot; (15.24 cm x
+                      22.86 cm)
                     </p>
                     <p>
                       <strong>Resolution:</strong> 300 DPI minimum
@@ -299,7 +300,7 @@ export default function WorksToDo() {
                       PNG
                     </p>
                     <p>
-                      <strong>Bleed:</strong> 0.125" (3 mm) on all sides
+                      <strong>Bleed:</strong> 0.125&quot; (3 mm) on all sides
                     </p>
                     <p>
                       <strong>Spine Width:</strong> Calculated based on page
@@ -310,8 +311,8 @@ export default function WorksToDo() {
                       converted to outlines
                     </p>
                     <p>
-                      <strong>Branding:</strong> Include publisher's logo if
-                      required
+                      <strong>Branding:</strong> Include publisher&apos;s logo
+                      if required
                     </p>
                   </div>
                 </DialogContent>

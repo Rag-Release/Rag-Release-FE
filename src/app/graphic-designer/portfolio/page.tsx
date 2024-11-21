@@ -310,7 +310,7 @@ export default function DesignerPortfolio() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="italic">"{testimonial.text}"</p>
+                        <p className="italic">&quot;{testimonial.text}&quot;</p>
                       </CardContent>
                       <CardFooter>
                         <p className="font-semibold">- {testimonial.author}</p>

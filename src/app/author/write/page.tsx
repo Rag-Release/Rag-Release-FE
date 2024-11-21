@@ -41,7 +41,7 @@ import { getYDoc } from "@/lib/collaboration";
 import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
 
-const { ydoc, provider } = getYDoc();
+const { ydoc } = getYDoc();
 
 // // Initialize Yjs
 // const ydoc = new Y.Doc();

@@ -24,8 +24,8 @@ export default function PrivacyPolicyFooter() {
         <p>
           We reserve the right to update this Privacy Policy at any time. We
           will notify you of any changes by posting the new Privacy Policy on
-          this page and updating the "Last updated" date at the top of this
-          policy.
+          this page and updating the &quot;Last updated&quot; date at the top of
+          this policy.
         </p>
       </CardContent>
     </Card>

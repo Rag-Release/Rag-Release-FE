@@ -94,8 +94,8 @@ export default function ForgotPasswordForm() {
               Check your email
             </h3>
             <p className="mt-1 text-sm text-gray-400">
-              We've sent a password reset link to {email}. Please check your
-              inbox and follow the instructions to reset your password.
+              We&apos;ve sent a password reset link to {email}. Please check
+              your inbox and follow the instructions to reset your password.
             </p>
             <Button
               onClick={() => setIsSubmitted(false)}

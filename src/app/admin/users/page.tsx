@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -395,8 +395,8 @@ export default function UserManagementAdmin() {
               <DialogHeader>
                 <DialogTitle>Delete User</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to delete "{selectedUser?.name}"? This
-                  action cannot be undone.
+                  Are you sure you want to delete &quot;{selectedUser?.name}
+                  &quot;? This action cannot be undone.
                 </DialogDescription>
               </DialogHeader>
               <Alert variant="destructive">

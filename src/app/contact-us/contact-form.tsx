@@ -94,7 +94,7 @@ export default function ContactForm({
           htmlFor="verify"
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white"
         >
-          I'm not a robot
+          I&apos;m not a robot
         </label>
         {isVerified && (
           <motion.div

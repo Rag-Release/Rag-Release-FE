@@ -685,8 +685,8 @@ export default function BookManagementAdmin() {
               <DialogHeader>
                 <DialogTitle>Delete Book</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to delete "{selectedBook?.title}"? This
-                  action cannot be undone.
+                  Are you sure you want to delete &quot;{selectedBook?.title}
+                  &quot;? This action cannot be undone.
                 </DialogDescription>
               </DialogHeader>
               <Alert variant="destructive">
