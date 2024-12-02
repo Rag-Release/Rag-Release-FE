@@ -32,17 +32,37 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { signOut } from "@/redux/features/authSlice";
 
-export default function Navbar({
-  isSignedIn = true,
-  userRole = "author", // Possible values: "common", "admin", "designer", "reviewer", author
-}: {
-  isSignedIn?: boolean;
-  userRole?: string;
-}) {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("");
+  // "common", "reader", "author", "reviewer", "publisher", "designer", "book_shop_owner";
+
+  interface User {
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    role: string | null;
+  }
+
+  interface AuthState {
+    token: string | null;
+    user: User | null;
+    isSignedIn: boolean;
+  }
+
+  const dispatch = useDispatch();
+
+  const authState = useAppSelector((state) => state.authReducer);
+  // Directly derive user role and signed-in status from authState
+  const isSignedIn = authState.isSignedIn;
+  const userRole = authState.user?.role || "common";
+
+  // Use isUserSignedIn and userCurrentRole in your component  const currentUserRole = authState.user?.role || userRole;
 
   const handleTabClick = async (tab: string) => {
     setActiveTab(tab);
@@ -52,6 +72,19 @@ export default function Navbar({
       setDropdownOpen(false);
       setTimeout(() => setIsMenuOpen(false), 1000); // Hide after 1000ms
     }
+  };
+
+  const handleLogout = () => {
+    // Clear local storage
+    // localStorage.clear();  or
+
+    localStorage.removeItem("persist:root");
+
+    // Dispatch sign out action to update Redux state
+    dispatch(signOut());
+
+    // Optionally, redirect to login page or home page
+    window.location.href = "/auth/sign-in";
   };
 
   // const toggleDropdown = () => {
@@ -495,6 +528,9 @@ export default function Navbar({
                           <Button
                             variant="ghost"
                             className="hover:bg-transparent"
+                            onClick={() => {
+                              handleLogout();
+                            }}
                           >
                             <LogOut className="mr-2 h-4 w-4" />
                             Sign Out
@@ -570,7 +606,13 @@ export default function Navbar({
                         </Button>
                       </Link>
                       <Link href="/sign-out">
-                        <Button variant="ghost" className="w-full text-left">
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left"
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                        >
                           Sign Out
                         </Button>
                       </Link>
@@ -604,7 +646,13 @@ export default function Navbar({
                         </Button>
                       </Link>{" "}
                       <Link href="/sign-out">
-                        <Button variant="ghost" className="w-full text-left">
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left"
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                        >
                           Sign Out
                         </Button>
                       </Link>
@@ -633,7 +681,13 @@ export default function Navbar({
                         </Button>
                       </Link>
                       <Link href="/sign-out">
-                        <Button variant="ghost" className="w-full text-left">
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left"
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                        >
                           Sign Out
                         </Button>
                       </Link>
@@ -662,7 +716,13 @@ export default function Navbar({
                         </Button>
                       </Link>
                       <Link href="/sign-out">
-                        <Button variant="ghost" className="w-full text-left">
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left"
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                        >
                           Sign Out
                         </Button>
                       </Link>
@@ -686,7 +746,13 @@ export default function Navbar({
                         </Button>
                       </Link>
                       <Link href="/sign-out">
-                        <Button variant="ghost" className="w-full text-left">
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left"
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                        >
                           Sign Out
                         </Button>
                       </Link>
