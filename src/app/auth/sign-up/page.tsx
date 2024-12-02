@@ -6,23 +6,54 @@ import { motion } from "framer-motion";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import AuthService from "../../../services/authService";
+import { setUser, setToken } from "@/redux/features/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign up logic here
-    console.log("Sign up data:", formData);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Validate inputs
+    if (!formData) {
+      setErrorMessage("Email and password are required.");
+      return;
+    }
+
+    try {
+      const response = await AuthService.signupUser(formData);
+
+      console.log("Login Successful:", response);
+
+      dispatch(setToken(response.data.token));
+      dispatch(setUser(response.data.user));
+      window.location.href = "/";
+
+      // Handle successful login (e.g., redirect user)
+    } catch (error: unknown) {
+      console.error("Login Error:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Sign up failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -43,21 +74,41 @@ export default function SignUpForm() {
         <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Create Account
         </h2>
+        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
-              htmlFor="name"
+              htmlFor="firstName"
               className="block text-sm font-medium text-gray-300"
             >
-              Name
+              First Name
             </label>
             <Input
-              id="name"
-              name="name"
+              id="fistName"
+              name="firstName"
               type="text"
               required
-              placeholder="Enter your name"
-              value={formData.name}
+              placeholder="Enter your first name"
+              value={formData.firstName}
+              onChange={handleChange}
+              className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Last Name
+            </label>
+            <Input
+              id="lastName"
+              name="lastName"
+              type="text"
+              required
+              placeholder="Enter your last name"
+              value={formData.lastName}
               onChange={handleChange}
               className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
             />

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,47 @@ import { motion } from "framer-motion";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import AuthService from "../../../services/authService";
+import { setUser, setToken } from "@/redux/features/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 // Sign In Form Component
 const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Validate inputs
+    if (!email || !password) {
+      setErrorMessage("Email and password are required.");
+      return;
+    }
+
+    try {
+      const response = await AuthService.loginUser(email, password);
+
+      console.log("Login Successful:", response);
+
+      dispatch(setToken(response.data.token));
+      dispatch(setUser(response.data.user));
+      window.location.href = "/";
+
+      // Handle successful login (e.g., redirect user)
+    } catch (error: unknown) {
+      console.error("Login Error:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please try again."
+      );
+    }
+  };
 
   return (
     <motion.div
@@ -23,7 +59,8 @@ const SignInForm = () => {
       <h2 className="text-3xl font-bold text-center mb-6 text-white">
         Welcome Back
       </h2>
-      <form className="space-y-4">
+      {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
           <label
             htmlFor="email"
@@ -78,10 +115,11 @@ const SignInForm = () => {
         </div>
         <Button
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-          type="submit"
+          type="submit" // Change to type submit for form submission
         >
           <LogIn className="mr-2 h-4 w-4" /> Sign In
         </Button>
+        {/* Additional buttons and links */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-600"></div>
