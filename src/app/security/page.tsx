@@ -52,8 +52,8 @@ const securityFeatures = [
 
 export default function SecurityPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      <div className="container mx-auto px-4 py-16 w-full">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-6">
+      <div className="max-w-4xl mx-auto space-y-12">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

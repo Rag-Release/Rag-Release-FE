@@ -34,8 +34,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+      <main className="container mx-auto max-w-6xl px-4 py-8">
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">
             Top Rated Books
