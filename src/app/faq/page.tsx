@@ -82,7 +82,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-3xl bg-gray-800 rounded-lg shadow-xl overflow-hidden">
         <div className="p-8">
           <h2 className="text-3xl font-bold text-white mb-6">
