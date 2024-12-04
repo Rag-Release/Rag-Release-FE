@@ -8,7 +8,6 @@ import {
   Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -22,7 +21,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppSelector } from "@/redux/store";
+import AccountService from "@/services/accountService";
+import { setUser, setToken } from "@/redux/features/authSlice";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 type AccountTypeKeys =
   | "common"
@@ -34,7 +36,7 @@ type AccountTypeKeys =
   | "publisher";
 
 interface userData {
-  // id: number;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -69,7 +71,7 @@ const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
 export default function Component() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userData, setUserData] = useState({
-    // id: "",
+    id: "",
     email: "",
     firstName: "",
     lastName: "",
@@ -92,12 +94,15 @@ export default function Component() {
     (userData.role as AccountTypeKeys) || "common";
   const accountInfo = AccountTypes[accountType] || AccountTypes.common;
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const authState = useAppSelector((state) => state.authReducer);
 
   useEffect(() => {
     if (authState.user) {
       setUserData({
         ...userData,
+        id: authState.user.id || "",
         email: authState.user.email || "",
         firstName: authState.user.firstName || "",
         lastName: authState.user.lastName || "",
@@ -119,6 +124,59 @@ export default function Component() {
       });
     }
   }, [authState.user]);
+
+  // const validateFormData = (data) => {
+  //   const { firstName, lastName, email, phoneNumber } = data;
+  //   if (!firstName || !lastName || !email || !phoneNumber) {
+  //     throw new Error("All fields must be filled out.");
+  //   }
+  //   // Add more validation as needed
+  // };
+
+  async function updateProfile(
+    id: string | null,
+    userData: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      role: string;
+      isEmailVerified: boolean;
+      isActive: boolean;
+      createdAt: string;
+      updatedAt: string;
+      homeAddress: string;
+      deliveryAddress: string;
+      phoneNumber: string;
+      pickupPoint: string;
+      company: string;
+      fiscalCode: string;
+      cardNumber: string;
+      cardExpiry: string;
+    }
+  ) {
+    console.log("🚀 ~ Component ~ userData:", userData);
+    console.log("🚀 ~ Component ~ id:", id);
+    if (!id) {
+      throw new Error("User ID is required to update profile.");
+    }
+
+    try {
+      const response = await AccountService.updateProfile(id, userData);
+
+      if (!response) {
+        throw new Error("Failed to update profile.");
+      }
+
+      const updatedUser = await response;
+
+      dispatch(setUser(updatedUser));
+      setUserData(updatedUser);
+      console.log("🚀 ~ Component ~ setUserData:", userData);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
+  }
 
   // const handleEdit = () => {
   //   setIsDialogOpen(true);
@@ -298,6 +356,9 @@ export default function Component() {
                     id="firstName"
                     defaultValue={userData.firstName}
                     className="bg-gray-800 text-gray-400"
+                    onChange={(e) =>
+                      setUserData({ ...userData, firstName: e.target.value })
+                    }
                   />
                 </div>
 
@@ -308,6 +369,9 @@ export default function Component() {
                       id="lastName"
                       defaultValue={userData.lastName}
                       className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData({ ...userData, lastName: e.target.value })
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -317,6 +381,9 @@ export default function Component() {
                       type="email"
                       defaultValue={userData.email}
                       className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData({ ...userData, email: e.target.value })
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -325,6 +392,12 @@ export default function Component() {
                       id="home-address"
                       defaultValue={userData.homeAddress}
                       className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData({
+                          ...userData,
+                          homeAddress: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -333,6 +406,12 @@ export default function Component() {
                       id="delivery-address"
                       defaultValue={userData.deliveryAddress}
                       className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData({
+                          ...userData,
+                          deliveryAddress: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -341,6 +420,12 @@ export default function Component() {
                       id="phone"
                       defaultValue={userData.phoneNumber}
                       className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData({
+                          ...userData,
+                          phoneNumber: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -354,9 +439,16 @@ export default function Component() {
                   </Button>
                   <Button
                     className="bg-green-500 text-white hover:bg-green-700"
-                    onClick={() => {
-                      // Add your save logic here
-                      setIsDialogOpen(false);
+                    onClick={async () => {
+                      try {
+                        await updateProfile(
+                          authState.user?.id ?? null,
+                          userData
+                        );
+                        setIsDialogOpen(false);
+                      } catch (error) {
+                        console.error("Failed to update profile:", error);
+                      }
                     }}
                   >
                     Save changes
