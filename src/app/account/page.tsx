@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -8,7 +7,7 @@ import {
   Package,
   Star,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,112 +21,121 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
 
 type AccountTypeKeys =
-  | "basic"
-  | "pro"
+  | "common"
+  | "designer"
+  | "reviewer"
   | "author"
   | "editor"
-  | "graphicDesigner";
+  | "book_shop_owner"
+  | "publisher";
 
+interface userData {
+  // id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  isEmailVerified: boolean;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  homeAddress: string;
+  deliveryAddress: string;
+  phoneNumber: string;
+  pickupPoint: string;
+  company: string;
+  fiscalCode: string;
+  cardNumber: string;
+  cardExpiry: string;
+}
 const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
   {
-    basic: { label: "Basic Account", color: "bg-gray-400" },
-    pro: { label: "PRO Account", color: "bg-blue-500" },
+    common: { label: "Common Account", color: "bg-gray-400" },
+    designer: { label: "Designer Account", color: "bg-blue-500" },
+    reviewer: { label: "Reviewer Account", color: "bg-yellow-500" },
     author: { label: "Author Account", color: "bg-green-500" },
     editor: { label: "Editor Account", color: "bg-yellow-500" },
-    graphicDesigner: {
-      label: "Graphic Designer Account",
+    book_shop_owner: {
+      label: "Book Shop Owner Account",
       color: "bg-purple-500",
     },
+    publisher: { label: "Publisher Account", color: "bg-purple-500" },
   };
 
 export default function Component() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [userData] = useState({
-    name: "Helene Engels",
-    email: "helene@example.com",
-    accountType: "pro",
-    homeAddress: "2 Miles Drive, NJ 071, New York, United States of America",
-    deliveryAddress: "9th St. PATH Station, New York, United States of America",
-    phoneNumbers: ["+1234 567 890", "+12 345 678"],
-    pickupPoint: "Herald Square, 2, New York, United States of America",
-    company: "FLOWBITE LLC",
-    fiscalCode: "18673557",
-    cardNumber: "****7658",
-    cardExpiry: "10/2024",
+  const [userData, setUserData] = useState({
+    // id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+    isEmailVerified: false,
+    isActive: false,
+    createdAt: "",
+    updatedAt: "",
+    homeAddress: "",
+    deliveryAddress: "",
+    phoneNumber: "",
+    pickupPoint: "",
+    company: "",
+    fiscalCode: "",
+    cardNumber: "",
+    cardExpiry: "",
   });
-  //   const [isEditMode, setIsEditMode] = useState(false);
-
-  //   const handleEdit = () => {
-  //     setIsEditMode(true);
-  //   };
-
-  //   const handleSave = () => {
-  //     setIsEditMode(false);
-  //   };
-
-  //   const handleCancel = () => {
-  //     setIsEditMode(false);
-  //   };
-
-  //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const { name, value } = e.target;
-  //     setUserData((prev) => ({ ...prev, [name]: value }));
-  //   };
-  //   const handleAddPhoneNumber = () => {
-  //     setUserData((prev) => ({
-  //      ...prev,
-  //       phoneNumbers: [...prev.phoneNumbers, ""],
-  //     }));
-  //     };
-
-  //     const handleRemovePhoneNumber = (index: number) => {
-  //     setUserData((prev) => ({
-  //      ...prev,
-  //       phoneNumbers: prev.phoneNumbers.filter((_, i) => i!== index),
-  //     }));
-  //     };
-
-  //     const handleAddCardNumber = () => {
-  //     setUserData((prev) => ({
-  //      ...prev,
-  //       cardNumber: [...prev.cardNumber, ""],
-  //     }));
-  //     };
-
-  //     const handleRemoveCardNumber = (index: number) => {
-  //     setUserData((prev) => ({
-  //      ...prev,
-  //       cardNumber: prev.cardNumber.filter((_, i) => i!== index),
-  //     }));
-  //     };
-  //     const handleAddCardExpiry = () => {
-  //     setUserData((prev) => ({
-  //      ...prev,
-  //       cardExpiry: [...prev.cardExpiry, ""],
-  //     }));
-  //     };
-
-  //     const handleRemoveCardExpiry = (index: number) => {
-  //         setUserData((prev) => ({
-  //      ...prev,
-  //       cardExpiry: prev.cardExpiry.filter((_, i) => i!== index),
-  //     }));
-  //     };
-
-  //     const handleSubmit = (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     // Handle sign up logic here
-  //     console.log("Sign up data:", userData);
-  //     };
 
   const accountType: AccountTypeKeys =
-    (userData.accountType as AccountTypeKeys) || "basic"; // Default to basic if not provided
-  const accountInfo = AccountTypes[accountType] || AccountTypes.basic; // Fallback to basic
+    (userData.role as AccountTypeKeys) || "common";
+  const accountInfo = AccountTypes[accountType] || AccountTypes.common;
+
+  const authState = useAppSelector((state) => state.authReducer);
+
+  useEffect(() => {
+    if (authState.user) {
+      setUserData({
+        ...userData,
+        email: authState.user.email || "",
+        firstName: authState.user.firstName || "",
+        lastName: authState.user.lastName || "",
+        role: authState.user.role || "",
+        isEmailVerified: authState.user.isEmailVerified || false,
+        isActive: authState.user.isActive || false,
+        createdAt: authState.user.createdAt || "",
+        updatedAt: authState.user.updatedAt || "",
+        homeAddress: authState.user.homeAddress || "",
+        deliveryAddress: authState.user.deliveryAddress || "",
+        phoneNumber: authState.user.phoneNumber
+          ? authState.user.phoneNumber
+          : "-",
+        pickupPoint: authState.user.pickupPoint || "",
+        company: authState.user.company || "",
+        fiscalCode: authState.user.fiscalCode || "",
+        cardNumber: authState.user.cardNumber || "",
+        cardExpiry: authState.user.cardExpiry || "",
+      });
+    }
+  }, [authState.user]);
+
+  // const handleEdit = () => {
+  //   setIsDialogOpen(true);
+  // };
+  // const handleSave = () => {
+  //   setIsDialogOpen(false);
+  // };
+  // const handleCancel = () => {
+  //   setIsDialogOpen(false);
+  // };
+  // const dispatch = useDispatch();
+  // const handleDelete = () => {
+  //   dispatch({ type: "auth/logout" });
+  // };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <main className="container mx-auto max-w-6xl px-4 py-8">
         <h1 className="mb-8 text-3xl font-bold">General overview</h1>
 
@@ -194,12 +202,12 @@ export default function Component() {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-2xl font-bold text-white">
-                    {userData.name}
+                    {userData.firstName || "-"} {userData.lastName || "-"}
                   </h2>
                   <span
                     className={`rounded ${accountInfo.color} px-2 py-1 text-xs font-semibold`}
                   >
-                    {accountInfo.label}
+                    {accountInfo.label || "Common Account"}
                   </span>
                 </div>
               </div>
@@ -211,19 +219,21 @@ export default function Component() {
                   <h3 className="mb-2 font-semibold text-white">
                     Email Address
                   </h3>
-                  <p className="text-gray-400">{userData.email}</p>
+                  <p className="text-gray-400">{userData.email || "-"}</p>
                 </div>
                 <div>
                   <h3 className="mb-2 font-semibold text-white">
                     Home Address
                   </h3>
-                  <p className="text-gray-400">{userData.homeAddress}</p>
+                  <p className="text-gray-400">{userData.homeAddress || "-"}</p>
                 </div>
                 <div>
                   <h3 className="mb-2 font-semibold text-white">
                     Delivery Address
                   </h3>
-                  <p className="text-gray-400">{userData.deliveryAddress}</p>
+                  <p className="text-gray-400">
+                    {userData.deliveryAddress || "-"}
+                  </p>
                 </div>
               </div>
               <div className="space-y-6">
@@ -231,22 +241,21 @@ export default function Component() {
                   <h3 className="mb-2 font-semibold text-white">
                     Phone Number
                   </h3>
-                  <p className="text-gray-400">
-                    {userData.phoneNumbers.join(" / ")}
-                  </p>
+                  <p className="text-gray-400">{userData.phoneNumber || "-"}</p>
                 </div>
                 <div>
                   <h3 className="mb-2 font-semibold text-white">
                     Favorite pick-up point
                   </h3>
-                  <p className="text-gray-400">{userData.pickupPoint}</p>
+                  <p className="text-gray-400">{userData.pickupPoint || "-"}</p>
                 </div>
                 <div>
                   <h3 className="mb-2 font-semibold text-white">
                     My Companies
                   </h3>
                   <p className="text-gray-400">
-                    {userData.company}, Fiscal code: {userData.fiscalCode}
+                    {userData.company || "-"}, Fiscal code:{" "}
+                    {userData.fiscalCode || "-"}
                   </p>
                 </div>
                 <div>
@@ -259,10 +268,10 @@ export default function Component() {
                     </div>
                     <div>
                       <p className="font-medium text-white">
-                        Visa ending in {userData.cardNumber.slice(-4)}
+                        Visa ending in {userData.cardNumber.slice(-4) || "-"}
                       </p>
                       <p className="text-sm text-gray-400">
-                        Expiry {userData.cardExpiry}
+                        Expiry {userData.cardExpiry || "-"}
                       </p>
                     </div>
                   </div>
@@ -283,12 +292,21 @@ export default function Component() {
                     Make changes to your profile information here.
                   </DialogDescription>
                 </DialogHeader>
+                <div className="grid gap-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    defaultValue={userData.firstName}
+                    className="bg-gray-800 text-gray-400"
+                  />
+                </div>
+
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="lastName">Last Name</Label>
                     <Input
-                      id="name"
-                      defaultValue={userData.name}
+                      id="lastName"
+                      defaultValue={userData.lastName}
                       className="bg-gray-800 text-gray-400"
                     />
                   </div>
@@ -321,7 +339,7 @@ export default function Component() {
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
-                      defaultValue={userData.phoneNumbers[0]}
+                      defaultValue={userData.phoneNumber}
                       className="bg-gray-800 text-gray-400"
                     />
                   </div>

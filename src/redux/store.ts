@@ -6,16 +6,23 @@ import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 // Configure persist
 const persistConfig = {
-    key: 'root',
-    storage,
+  key: "root",
+  storage,
+  // Optionally, you can add a whitelist or blacklist here
+  // whitelist: ['authReducer'], // Only persist authReducer
+  // blacklist: [] // Do not persist these reducers
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
-    reducer: {
-        authReducer: persistedReducer,
-    },
+  reducer: {
+    authReducer: persistedReducer,
+  },
+  //   middleware: (getDefaultMiddleware) =>
+  //     getDefaultMiddleware({
+  //       serializableCheck: false, // Disable serializability checks temporarily
+  //     }),
 });
 
 export const persistor = persistStore(store);
