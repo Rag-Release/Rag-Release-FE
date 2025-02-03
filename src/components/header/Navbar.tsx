@@ -96,7 +96,7 @@ export default function Navbar() {
 
   const renderDropdownMenu = () => {
     switch (userRole) {
-      case "admin":
+      case "publisher":
         return (
           <>
             <DropdownMenuItem>
@@ -115,7 +115,7 @@ export default function Navbar() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href="/admin/dashboard"
+                href="/publisher/dashboard"
                 className={`flex items-center ${
                   activeTab === "dashboard" ? "text-green-600" : "text-ghost"
                 }`}
@@ -658,7 +658,7 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
-                  {userRole === "admin" && (
+                  {userRole === "publisher" && (
                     <>
                       <Link href="/account">
                         <Button variant="ghost" className="w-full text-left">
