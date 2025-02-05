@@ -20,6 +20,7 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -31,10 +32,18 @@ export default function SignUpForm() {
     e.preventDefault(); // Prevent default form submission
 
     // Validate inputs
-    if (!formData) {
-      setErrorMessage("Email and password are required.");
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
+      setErrorMessage("All fields are required.");
       return;
     }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
 
     try {
       const response = await AuthService.signupUser(formData);
@@ -44,6 +53,9 @@ export default function SignUpForm() {
       dispatch(setToken(response.data.token));
       dispatch(setUser(response.data.user));
       window.location.href = "/";
+    } finally {
+      setIsLoading(false);
+    }
 
       // Handle successful login (e.g., redirect user)
     } catch (error: unknown) {
@@ -85,7 +97,7 @@ export default function SignUpForm() {
               First Name
             </label>
             <Input
-              id="fistName"
+              id="firstName"
               name="firstName"
               type="text"
               required
@@ -170,8 +182,18 @@ export default function SignUpForm() {
           <Button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+            disabled={isLoading}
           >
-            <LogIn className="mr-2 h-4 w-4" /> Sign Up
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Signing Up...
+              </div>
+            ) : (
+              <>
+                <LogIn className="mr-2 h-4 w-4" /> Sign Up
+              </>
+            )}
           </Button>
         </form>
         <div className="mt-6">
