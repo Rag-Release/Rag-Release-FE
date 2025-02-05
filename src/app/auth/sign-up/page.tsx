@@ -25,7 +25,8 @@ export default function SignUpForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -169,7 +170,8 @@ export default function SignUpForm() {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500 pr-10"
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
+ focus:ring-indigo-500 pr-10"
               />
               <button
                 type="button"
@@ -200,7 +202,8 @@ export default function SignUpForm() {
                 placeholder="Confirm your password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500 pr-10"
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
+ focus:ring-indigo-500 pr-10"
               />
               <button
                 type="button"
