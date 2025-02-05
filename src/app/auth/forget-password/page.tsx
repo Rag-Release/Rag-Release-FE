@@ -16,7 +16,7 @@ export default function ForgotPasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     // Basic email validation
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError("Please enter a valid email address");
@@ -26,21 +26,23 @@ export default function ForgotPasswordForm() {
     setIsLoading(true);
     try {
       // Call password reset API
-      const response = await fetch('/api/auth/reset-password', {
-        method: 'POST',
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send reset email');
+        throw new Error("Failed to send reset email");
       }
 
       setIsSubmitted(true);
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
+      setError(
+        (err as Error).message || "Something went wrong. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -99,9 +101,7 @@ export default function ForgotPasswordForm() {
                 </>
               )}
             </Button>
-            {error && (
-              <p className="text-sm text-red-400 mt-2">{error}</p>
-            )}
+            {error && <p className="text-sm text-red-400 mt-2">{error}</p>}
           </form>
         ) : (
           <motion.div
