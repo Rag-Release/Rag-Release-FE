@@ -23,6 +23,7 @@ export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
@@ -31,7 +32,16 @@ export default function SignUpForm() {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "password") {
+      const strength = Math.min(
+        Math.floor(value.length / 3),
+        4
+      );
+      setPasswordStrength(strength);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +107,11 @@ export default function SignUpForm() {
         <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Create Account
         </h2>
-        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="text-red-500 bg-red-500/10 p-3 rounded-md mb-4 text-sm">
+            {errorMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -117,6 +131,28 @@ export default function SignUpForm() {
               onChange={handleChange}
               className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
             />
+          </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-1.5">
+              <div
+                className={`h-1.5 rounded-full ${
+                  passwordStrength === 0
+                    ? "bg-red-500"
+                    : passwordStrength < 3
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+                }`}
+                style={{ width: `${(passwordStrength / 4) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Password strength:{" "}
+              {passwordStrength === 0
+                ? "Weak"
+                : passwordStrength < 3
+                ? "Medium"
+                : "Strong"}
+            </p>
           </div>
           <div>
             <label
@@ -170,8 +206,7 @@ export default function SignUpForm() {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
- focus:ring-indigo-500 pr-10"
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500 pr-10"
               />
               <button
                 type="button"
@@ -250,6 +285,7 @@ export default function SignUpForm() {
             <Button
               variant="outline"
               className="w-full bg-white hover:bg-gray-100 text-gray-900"
+              disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
