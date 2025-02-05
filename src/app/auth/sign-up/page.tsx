@@ -25,6 +25,9 @@ export default function SignUpForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
+  const MIN_PASSWORD_LENGTH = 8;
+  const STRENGTH_LEVELS = 4;
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
@@ -42,7 +45,14 @@ export default function SignUpForm() {
     setFormData({ ...formData, [name]: value });
 
     if (name === "password") {
-      const strength = Math.min(Math.floor(value.length / 3), 4);
+      const lengthScore = value.length >= MIN_PASSWORD_LENGTH ? 1 : 0;
+      const complexityScore = [
+        /[A-Z]/.test(value),
+        /[a-z]/.test(value),
+        /\d/.test(value),
+        /[^A-Za-z0-9]/.test(value),
+      ].filter(Boolean).length;
+      const strength = Math.min(lengthScore + complexityScore, STRENGTH_LEVELS);
       setPasswordStrength(strength);
     }
   };
