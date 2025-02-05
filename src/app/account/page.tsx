@@ -85,6 +85,25 @@ export default function AccountPage() {
     (userData.role as AccountTypeKeys) || "common";
   const accountInfo = AccountTypes[accountType] || AccountTypes.common;
 
+  // Field configuration array
+  const fields: {
+    id: keyof User;
+    label: string;
+    type?: string;
+  }[] = [
+    { id: "firstName", label: "First Name", type: "text" },
+    { id: "lastName", label: "Last Name", type: "text" },
+    { id: "email", label: "Email", type: "email" },
+    { id: "homeAddress", label: "Home Address", type: "text" },
+    { id: "deliveryAddress", label: "Delivery Address", type: "text" },
+    { id: "phoneNumber", label: "Phone Number", type: "text" },
+    { id: "pickupPoint", label: "Pickup Point", type: "text" },
+    { id: "company", label: "Company", type: "text" },
+    { id: "fiscalCode", label: "Fiscal Code", type: "text" },
+    { id: "cardNumber", label: "Card Number", type: "text" },
+    { id: "cardExpiry", label: "Card Expiry", type: "text" },
+  ];
+
   // Update local state when the Redux user changes
   useEffect(() => {
     if (authState.user) {
@@ -288,143 +307,13 @@ export default function AccountPage() {
               </div>
             </div>
 
-            {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="mt-6 bg-green-400 hover:bg-green-700">
-                  Edit your data
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] bg-gray-900 text-white">
-                <DialogHeader>
-                  <DialogTitle>Edit Profile</DialogTitle>
-                  <DialogDescription>
-                    Make changes to your profile information here.
-                  </DialogDescription>
-                </DialogHeader>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    value={userData.firstName}
-                    className="bg-gray-800 text-gray-400"
-                    onChange={(e) =>
-                      setUserData((prev) => ({
-                        ...prev,
-                        firstName: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      value={userData.lastName}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          lastName: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={userData.email || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="home-address">Home Address</Label>
-                    <Input
-                      id="home-address"
-                      value={userData.homeAddress}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          homeAddress: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="delivery-address">Delivery Address</Label>
-                    <Input
-                      id="delivery-address"
-                      value={userData.deliveryAddress}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          deliveryAddress: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      value={userData.phoneNumber}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          phoneNumber: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-3">
-                  <Button
-                    variant="outline"
-                    className="border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
-                    onClick={() => setIsDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="bg-green-500 text-white hover:bg-green-700"
-                    onClick={async () => {
-                      try {
-                        await updateProfile(
-                          authState.user?.id ?? null,
-                          userData
-                        );
-                        setIsDialogOpen(false);
-                      } catch (error) {
-                        console.error("Failed to update profile:", error);
-                      }
-                    }}
-                  >
-                    Save changes
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog> */}
-
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="mt-6 bg-green-400 hover:bg-green-700">
                   Edit your data
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] bg-gray-900 text-white">
+              <DialogContent className="sm:max-w-[600px] bg-gray-900 text-white">
                 <DialogHeader>
                   <DialogTitle>Edit Profile</DialogTitle>
                   <DialogDescription>
@@ -432,165 +321,34 @@ export default function AccountPage() {
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    value={userData.firstName || ""}
-                    className="bg-gray-800 text-gray-400"
-                    onChange={(e) =>
-                      setUserData((prev) => ({
-                        ...prev,
-                        firstName: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      value={userData.lastName || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          lastName: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={userData.email || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="home-address">Home Address</Label>
-                    <Input
-                      id="home-address"
-                      value={userData.homeAddress || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          homeAddress: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="delivery-address">Delivery Address</Label>
-                    <Input
-                      id="delivery-address"
-                      value={userData.deliveryAddress || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          deliveryAddress: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      value={userData.phoneNumber || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          phoneNumber: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="pickup-point">Pickup Point</Label>
-                    <Input
-                      id="pickup-point"
-                      value={userData.pickupPoint || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          pickupPoint: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="company">Company</Label>
-                    <Input
-                      id="company"
-                      value={userData.company || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          company: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="fiscal-code">Fiscal Code</Label>
-                    <Input
-                      id="fiscal-code"
-                      value={userData.fiscalCode || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          fiscalCode: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="card-number">Card Number</Label>
-                    <Input
-                      id="card-number"
-                      value={userData.cardNumber || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          cardNumber: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="card-expiry">Card Expiry</Label>
-                    <Input
-                      id="card-expiry"
-                      value={userData.cardExpiry || ""}
-                      className="bg-gray-800 text-gray-400"
-                      onChange={(e) =>
-                        setUserData((prev) => ({
-                          ...prev,
-                          cardExpiry: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
+                {/* Two-column grid of form fields */}
+                <div className="grid grid-cols-2 gap-4">
+                  {fields.map((field) => (
+                    <div key={field.id} className="grid gap-2">
+                      <Label htmlFor={field.id}>{field.label}</Label>
+                      <Input
+                        id={field.id}
+                        type={field.type || "text"}
+                        value={
+                          typeof userData[field.id] === "boolean"
+                            ? userData[field.id]
+                              ? "true"
+                              : "false"
+                            : userData[field.id]?.toString() || ""
+                        }
+                        className="bg-gray-800 text-gray-400"
+                        onChange={(e) =>
+                          setUserData((prev) => ({
+                            ...prev,
+                            [field.id]: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  ))}
                 </div>
 
-                <div className="flex justify-end gap-3">
+                <div className="flex justify-end gap-3 mt-6">
                   <Button
                     variant="outline"
                     className="border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
@@ -617,10 +375,10 @@ export default function AccountPage() {
                     {isLoading ? (
                       <div className="flex items-center">
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Signing Up...
+                        Updating...
                       </div>
                     ) : (
-                      <>Save changes</>
+                      "Save changes"
                     )}
                   </Button>
                 </div>
