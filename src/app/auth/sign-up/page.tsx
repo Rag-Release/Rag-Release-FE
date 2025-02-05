@@ -31,15 +31,18 @@ export default function SignUpForm() {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  /**
+   * Handles the change event for input fields in the sign-up form.
+   * Updates the form data state with the new value and calculates the password strength if the changed field is the password.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event triggered by the input field.
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     if (name === "password") {
-      const strength = Math.min(
-        Math.floor(value.length / 3),
-        4
-      );
+      const strength = Math.min(Math.floor(value.length / 3), 4);
       setPasswordStrength(strength);
     }
   };
@@ -90,14 +93,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-75 backdrop-blur-sm"
-      style={{
-        backgroundImage: "url('/placeholder.svg?height=1080&width=1920')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -107,6 +103,7 @@ export default function SignUpForm() {
         <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Create Account
         </h2>
+
         {errorMessage && (
           <div className="text-red-500 bg-red-500/10 p-3 rounded-md mb-4 text-sm">
             {errorMessage}
@@ -131,28 +128,6 @@ export default function SignUpForm() {
               onChange={handleChange}
               className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
             />
-          </div>
-          <div className="mt-2">
-            <div className="w-full bg-gray-700 rounded-full h-1.5">
-              <div
-                className={`h-1.5 rounded-full ${
-                  passwordStrength === 0
-                    ? "bg-red-500"
-                    : passwordStrength < 3
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-                }`}
-                style={{ width: `${(passwordStrength / 4) * 100}%` }}
-              ></div>
-            </div>
-            <p className="text-xs text-gray-400 mt-1">
-              Password strength:{" "}
-              {passwordStrength === 0
-                ? "Weak"
-                : passwordStrength < 3
-                ? "Medium"
-                : "Strong"}
-            </p>
           </div>
           <div>
             <label
@@ -206,7 +181,8 @@ export default function SignUpForm() {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500 pr-10"
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
+ focus:ring-indigo-500 pr-10"
               />
               <button
                 type="button"
@@ -296,7 +272,30 @@ export default function SignUpForm() {
               Google
             </Button>
           </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-1.5">
+              <div
+                className={`h-1.5 rounded-full ${
+                  passwordStrength === 0
+                    ? "bg-red-500"
+                    : passwordStrength < 3
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+                }`}
+                style={{ width: `${(passwordStrength / 4) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Password strength:{" "}
+              {passwordStrength === 0
+                ? "Weak"
+                : passwordStrength < 3
+                ? "Medium"
+                : "Strong"}
+            </p>
+          </div>
         </div>
+
         <p className="mt-8 text-center text-sm text-gray-400">
           Already have an account?{" "}
           <Link
