@@ -86,9 +86,22 @@ export default function ForgotPasswordForm() {
             <Button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              disabled={isLoading}
             >
-              <Send className="mr-2 h-4 w-4" /> Reset Password
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Sending...
+                </div>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" /> Reset Password
+                </>
+              )}
             </Button>
+            {error && (
+              <p className="text-sm text-red-400 mt-2">{error}</p>
+            )}
           </form>
         ) : (
           <motion.div
