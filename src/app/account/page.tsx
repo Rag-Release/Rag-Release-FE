@@ -1,4 +1,7 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   ArrowDown,
   ArrowUp,
@@ -7,7 +10,6 @@ import {
   Package,
   Star,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,12 +22,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector, AppDispatch } from "@/redux/store";
 import AccountService from "@/services/accountService";
-import { setUser, setToken } from "@/redux/features/authSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { setUser } from "@/redux/features/authSlice";
+import { User } from "@/redux/features/authTypes"; // see below for shared type
 
+// Account Types
 type AccountTypeKeys =
   | "common"
   | "designer"
@@ -35,25 +37,6 @@ type AccountTypeKeys =
   | "book_shop_owner"
   | "publisher";
 
-interface userData {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  isEmailVerified: boolean;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  homeAddress: string;
-  deliveryAddress: string;
-  phoneNumber: string;
-  pickupPoint: string;
-  company: string;
-  fiscalCode: string;
-  cardNumber: string;
-  cardExpiry: string;
-}
 const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
   {
     common: { label: "Common Account", color: "bg-gray-400" },
@@ -68,9 +51,12 @@ const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
     publisher: { label: "Publisher Account", color: "bg-purple-500" },
   };
 
-export default function Component() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [userData, setUserData] = useState({
+export default function AccountPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const authState = useAppSelector((state) => state.authReducer);
+
+  // Initialize local state with default empty values
+  const [userData, setUserData] = useState<User>({
     id: "",
     email: "",
     firstName: "",
@@ -90,107 +76,67 @@ export default function Component() {
     cardExpiry: "",
   });
 
+  // Dialog open state
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Derive account type information
   const accountType: AccountTypeKeys =
     (userData.role as AccountTypeKeys) || "common";
   const accountInfo = AccountTypes[accountType] || AccountTypes.common;
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const authState = useAppSelector((state) => state.authReducer);
-
+  // Update local state when the Redux user changes
   useEffect(() => {
     if (authState.user) {
-      setUserData({
-        ...userData,
-        id: authState.user.id || "",
-        email: authState.user.email || "",
-        firstName: authState.user.firstName || "",
-        lastName: authState.user.lastName || "",
-        role: authState.user.role || "",
-        isEmailVerified: authState.user.isEmailVerified || false,
-        isActive: authState.user.isActive || false,
-        createdAt: authState.user.createdAt || "",
-        updatedAt: authState.user.updatedAt || "",
-        homeAddress: authState.user.homeAddress || "",
-        deliveryAddress: authState.user.deliveryAddress || "",
-        phoneNumber: authState.user.phoneNumber
-          ? authState.user.phoneNumber
-          : "-",
-        pickupPoint: authState.user.pickupPoint || "",
-        company: authState.user.company || "",
-        fiscalCode: authState.user.fiscalCode || "",
-        cardNumber: authState.user.cardNumber || "",
-        cardExpiry: authState.user.cardExpiry || "",
-      });
+      const user = authState.user;
+      setUserData((prev) => ({
+        ...prev,
+        id: user.id || "",
+        email: user.email || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        role: user.role || "",
+        isEmailVerified: user.isEmailVerified || false,
+        isActive: user.isActive || false,
+        createdAt: user.createdAt || "",
+        updatedAt: user.updatedAt || "",
+        homeAddress: user.homeAddress || "",
+        deliveryAddress: user.deliveryAddress || "",
+        phoneNumber: user.phoneNumber || "-",
+        pickupPoint: user.pickupPoint || "",
+        company: user.company || "",
+        fiscalCode: user.fiscalCode || "",
+        cardNumber: user.cardNumber || "",
+        cardExpiry: user.cardExpiry || "",
+      }));
     }
   }, [authState.user]);
 
-  // const validateFormData = (data) => {
-  //   const { firstName, lastName, email, phoneNumber } = data;
-  //   if (!firstName || !lastName || !email || !phoneNumber) {
-  //     throw new Error("All fields must be filled out.");
-  //   }
-  //   // Add more validation as needed
-  // };
-
-  async function updateProfile(
-    id: string | null,
-    userData: {
-      email: string;
-      firstName: string;
-      lastName: string;
-      role: string;
-      isEmailVerified: boolean;
-      isActive: boolean;
-      createdAt: string;
-      updatedAt: string;
-      homeAddress: string;
-      deliveryAddress: string;
-      phoneNumber: string;
-      pickupPoint: string;
-      company: string;
-      fiscalCode: string;
-      cardNumber: string;
-      cardExpiry: string;
-    }
-  ) {
-    console.log("🚀 ~ Component ~ userData:", userData);
-    console.log("🚀 ~ Component ~ id:", id);
+  // Function to update the profile data
+  async function updateProfile(id: string | null, data: User): Promise<void> {
     if (!id) {
       throw new Error("User ID is required to update profile.");
     }
+    setIsLoading(true);
 
     try {
-      const response = await AccountService.updateProfile(id, userData);
-
+      const response = await AccountService.updateProfile(id, data);
       if (!response) {
         throw new Error("Failed to update profile.");
       }
 
-      const updatedUser = await response;
+      const updatedUser: User = response.data.user;
 
+      // Update local state only if the profile update is successful
       dispatch(setUser(updatedUser));
       setUserData(updatedUser);
-      console.log("🚀 ~ Component ~ setUserData:", userData);
     } catch (error) {
       console.error("Error updating profile:", error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   }
-
-  // const handleEdit = () => {
-  //   setIsDialogOpen(true);
-  // };
-  // const handleSave = () => {
-  //   setIsDialogOpen(false);
-  // };
-  // const handleCancel = () => {
-  //   setIsDialogOpen(false);
-  // };
-  // const dispatch = useDispatch();
-  // const handleDelete = () => {
-  //   dispatch({ type: "auth/logout" });
-  // };
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -294,6 +240,7 @@ export default function Component() {
                   </p>
                 </div>
               </div>
+
               <div className="space-y-6">
                 <div>
                   <h3 className="mb-2 font-semibold text-white">
@@ -326,7 +273,11 @@ export default function Component() {
                     </div>
                     <div>
                       <p className="font-medium text-white">
-                        Visa ending in {userData.cardNumber.slice(-4) || "-"}
+                        {/* Safely slice the card number only if it exists */}
+                        Visa ending in{" "}
+                        {userData.cardNumber
+                          ? userData.cardNumber.slice(-4)
+                          : "-"}
                       </p>
                       <p className="text-sm text-gray-400">
                         Expiry {userData.cardExpiry || "-"}
@@ -337,7 +288,7 @@ export default function Component() {
               </div>
             </div>
 
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="mt-6 bg-green-400 hover:bg-green-700">
                   Edit your data
@@ -350,27 +301,33 @@ export default function Component() {
                     Make changes to your profile information here.
                   </DialogDescription>
                 </DialogHeader>
+
                 <div className="grid gap-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
-                    defaultValue={userData.firstName}
+                    value={userData.firstName}
                     className="bg-gray-800 text-gray-400"
                     onChange={(e) =>
-                      setUserData({ ...userData, firstName: e.target.value })
+                      setUserData((prev) => ({
+                        ...prev,
+                        firstName: e.target.value,
+                      }))
                     }
                   />
                 </div>
-
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                       id="lastName"
-                      defaultValue={userData.lastName}
+                      value={userData.lastName}
                       className="bg-gray-800 text-gray-400"
                       onChange={(e) =>
-                        setUserData({ ...userData, lastName: e.target.value })
+                        setUserData((prev) => ({
+                          ...prev,
+                          lastName: e.target.value,
+                        }))
                       }
                     />
                   </div>
@@ -379,10 +336,13 @@ export default function Component() {
                     <Input
                       id="email"
                       type="email"
-                      defaultValue={userData.email}
+                      value={userData.email || ""}
                       className="bg-gray-800 text-gray-400"
                       onChange={(e) =>
-                        setUserData({ ...userData, email: e.target.value })
+                        setUserData((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
                       }
                     />
                   </div>
@@ -390,13 +350,13 @@ export default function Component() {
                     <Label htmlFor="home-address">Home Address</Label>
                     <Input
                       id="home-address"
-                      defaultValue={userData.homeAddress}
+                      value={userData.homeAddress}
                       className="bg-gray-800 text-gray-400"
                       onChange={(e) =>
-                        setUserData({
-                          ...userData,
+                        setUserData((prev) => ({
+                          ...prev,
                           homeAddress: e.target.value,
-                        })
+                        }))
                       }
                     />
                   </div>
@@ -404,13 +364,13 @@ export default function Component() {
                     <Label htmlFor="delivery-address">Delivery Address</Label>
                     <Input
                       id="delivery-address"
-                      defaultValue={userData.deliveryAddress}
+                      value={userData.deliveryAddress}
                       className="bg-gray-800 text-gray-400"
                       onChange={(e) =>
-                        setUserData({
-                          ...userData,
+                        setUserData((prev) => ({
+                          ...prev,
                           deliveryAddress: e.target.value,
-                        })
+                        }))
                       }
                     />
                   </div>
@@ -418,18 +378,19 @@ export default function Component() {
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
-                      defaultValue={userData.phoneNumber}
+                      value={userData.phoneNumber}
                       className="bg-gray-800 text-gray-400"
                       onChange={(e) =>
-                        setUserData({
-                          ...userData,
+                        setUserData((prev) => ({
+                          ...prev,
                           phoneNumber: e.target.value,
-                        })
+                        }))
                       }
                     />
                   </div>
                 </div>
-                <div className="flex justify-end gap-3 text-black">
+
+                <div className="flex justify-end gap-3">
                   <Button
                     variant="outline"
                     className="border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
@@ -455,11 +416,221 @@ export default function Component() {
                   </Button>
                 </div>
               </DialogContent>
+            </Dialog> */}
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="mt-6 bg-green-400 hover:bg-green-700">
+                  Edit your data
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] bg-gray-900 text-white">
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                  <DialogDescription>
+                    Make changes to your profile information here.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={userData.firstName || ""}
+                    className="bg-gray-800 text-gray-400"
+                    onChange={(e) =>
+                      setUserData((prev) => ({
+                        ...prev,
+                        firstName: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={userData.lastName || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          lastName: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={userData.email || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="home-address">Home Address</Label>
+                    <Input
+                      id="home-address"
+                      value={userData.homeAddress || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          homeAddress: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="delivery-address">Delivery Address</Label>
+                    <Input
+                      id="delivery-address"
+                      value={userData.deliveryAddress || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          deliveryAddress: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={userData.phoneNumber || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          phoneNumber: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="pickup-point">Pickup Point</Label>
+                    <Input
+                      id="pickup-point"
+                      value={userData.pickupPoint || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          pickupPoint: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                      id="company"
+                      value={userData.company || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          company: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="fiscal-code">Fiscal Code</Label>
+                    <Input
+                      id="fiscal-code"
+                      value={userData.fiscalCode || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          fiscalCode: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="card-number">Card Number</Label>
+                    <Input
+                      id="card-number"
+                      value={userData.cardNumber || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          cardNumber: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="card-expiry">Card Expiry</Label>
+                    <Input
+                      id="card-expiry"
+                      value={userData.cardExpiry || ""}
+                      className="bg-gray-800 text-gray-400"
+                      onChange={(e) =>
+                        setUserData((prev) => ({
+                          ...prev,
+                          cardExpiry: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3">
+                  <Button
+                    variant="outline"
+                    className="border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
+                    onClick={() => setIsDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-green-500 text-white hover:bg-green-700"
+                    disabled={isLoading}
+                    onClick={async () => {
+                      try {
+                        await updateProfile(
+                          authState.user?.id ?? null,
+                          userData
+                        );
+                        setIsDialogOpen(false);
+                      } catch (error) {
+                        console.error("Failed to update profile:", error);
+                      }
+                    }}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Signing Up...
+                      </div>
+                    ) : (
+                      <>Save changes</>
+                    )}
+                  </Button>
+                </div>
+              </DialogContent>
             </Dialog>
           </CardContent>
         </Card>
       </main>
 
+      {/* Optional overlay for dialog */}
       {isDialogOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm"
