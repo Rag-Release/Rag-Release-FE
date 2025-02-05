@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { LogIn } from "lucide-react";
+import { LogIn, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import AuthService from "../../../services/authService";
@@ -20,21 +20,65 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const MIN_PASSWORD_LENGTH = 8;
+  const STRENGTH_LEVELS = 4;
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const dispatch = useDispatch<AppDispatch>();
 
+  /**
+   * Handles the change event for input fields in the sign-up form.
+   * Updates the form data state with the new value and calculates the password strength if the changed field is the password.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event triggered by the input field.
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "password") {
+      const lengthScore = value.length >= MIN_PASSWORD_LENGTH ? 1 : 0;
+      const complexityScore = [
+        /[A-Z]/.test(value),
+        /[a-z]/.test(value),
+        /\d/.test(value),
+        /[^A-Za-z0-9]/.test(value),
+      ].filter(Boolean).length;
+      const strength = Math.min(lengthScore + complexityScore, STRENGTH_LEVELS);
+      setPasswordStrength(strength);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission
 
     // Validate inputs
-    if (!formData) {
-      setErrorMessage("Email and password are required.");
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setErrorMessage("All fields are required.");
       return;
     }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
 
     try {
       const response = await AuthService.signupUser(formData);
@@ -53,18 +97,13 @@ export default function SignUpForm() {
           ? error.message
           : "Sign up failed. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-75 backdrop-blur-sm"
-      style={{
-        backgroundImage: "url('/placeholder.svg?height=1080&width=1920')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -74,7 +113,12 @@ export default function SignUpForm() {
         <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Create Account
         </h2>
-        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+
+        {errorMessage && (
+          <div className="text-red-500 bg-red-500/10 p-3 rounded-md mb-4 text-sm">
+            {errorMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -85,7 +129,7 @@ export default function SignUpForm() {
               First Name
             </label>
             <Input
-              id="fistName"
+              id="firstName"
               name="firstName"
               type="text"
               required
@@ -138,16 +182,30 @@ export default function SignUpForm() {
             >
               Password
             </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
+ focus:ring-indigo-500 pr-10"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
+              </button>
+            </div>
           </div>
           <div>
             <label
@@ -156,22 +214,46 @@ export default function SignUpForm() {
             >
               Confirm Password
             </label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              required
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                required
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="mt-1 block w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500
+ focus:ring-indigo-500 pr-10"
+              />
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
+              </button>
+            </div>
           </div>
           <Button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+            disabled={isLoading}
           >
-            <LogIn className="mr-2 h-4 w-4" /> Sign Up
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Signing Up...
+              </div>
+            ) : (
+              <>
+                <LogIn className="mr-2 h-4 w-4" /> Sign Up
+              </>
+            )}
           </Button>
         </form>
         <div className="mt-6">
@@ -189,6 +271,7 @@ export default function SignUpForm() {
             <Button
               variant="outline"
               className="w-full bg-white hover:bg-gray-100 text-gray-900"
+              disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
@@ -199,7 +282,30 @@ export default function SignUpForm() {
               Google
             </Button>
           </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-1.5">
+              <div
+                className={`h-1.5 rounded-full ${
+                  passwordStrength === 0
+                    ? "bg-red-500"
+                    : passwordStrength < 3
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+                }`}
+                style={{ width: `${(passwordStrength / 4) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Password strength:{" "}
+              {passwordStrength === 0
+                ? "Weak"
+                : passwordStrength < 3
+                ? "Medium"
+                : "Strong"}
+            </p>
+          </div>
         </div>
+
         <p className="mt-8 text-center text-sm text-gray-400">
           Already have an account?{" "}
           <Link

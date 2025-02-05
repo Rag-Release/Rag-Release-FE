@@ -10,23 +10,46 @@ import { Input } from "@/components/ui/input";
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle password reset logic here
-    console.log("Password reset requested for:", email);
-    setIsSubmitted(true);
+    setError("");
+
+    // Basic email validation
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Call password reset API
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send reset email");
+      }
+
+      setIsSubmitted(true);
+    } catch (err) {
+      setError(
+        (err as Error).message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-75 backdrop-blur-sm"
-      style={{
-        backgroundImage: "url('/placeholder.svg?height=1080&width=1920')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -65,9 +88,20 @@ export default function ForgotPasswordForm() {
             <Button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              disabled={isLoading}
             >
-              <Send className="mr-2 h-4 w-4" /> Reset Password
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Sending...
+                </div>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" /> Reset Password
+                </>
+              )}
             </Button>
+            {error && <p className="text-sm text-red-400 mt-2">{error}</p>}
           </form>
         ) : (
           <motion.div

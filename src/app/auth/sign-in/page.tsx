@@ -11,23 +11,28 @@ import AuthService from "../../../services/authService";
 import { setUser, setToken } from "@/redux/features/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
+import { Eye, EyeOff } from "lucide-react";
 
 // Sign In Form Component
 const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission
-
+    e.preventDefault();
     // Validate inputs
     if (!email || !password) {
       setErrorMessage("Email and password are required.");
       return;
     }
+
+    setIsLoading(true);
+    setErrorMessage("");
 
     try {
       const response = await AuthService.loginUser(email, password);
@@ -46,6 +51,8 @@ const SignInForm = () => {
           ? error.message
           : "Login failed. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,14 +91,32 @@ const SignInForm = () => {
           >
             Password
           </label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full bg-gray-700 text-white"
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+              onClick={() => setShowPassword(!showPassword)}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+              <span className="sr-only">
+                {showPassword ? "Hide password" : "Show password"}
+              </span>
+            </Button>
+          </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -115,9 +140,19 @@ const SignInForm = () => {
         </div>
         <Button
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-          type="submit" // Change to type submit for form submission
+          type="submit"
+          disabled={isLoading}
         >
-          <LogIn className="mr-2 h-4 w-4" /> Sign In
+          {isLoading ? (
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Signing In...
+            </div>
+          ) : (
+            <>
+              <LogIn className="mr-2 h-4 w-4" /> Sign In
+            </>
+          )}
         </Button>
         {/* Additional buttons and links */}
         <div className="relative">
