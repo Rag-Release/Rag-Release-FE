@@ -32,7 +32,13 @@ export default function SignUpForm() {
     e.preventDefault(); // Prevent default form submission
 
     // Validate inputs
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setErrorMessage("All fields are required.");
       return;
     }
@@ -53,9 +59,6 @@ export default function SignUpForm() {
       dispatch(setToken(response.data.token));
       dispatch(setUser(response.data.user));
       window.location.href = "/";
-    } finally {
-      setIsLoading(false);
-    }
 
       // Handle successful login (e.g., redirect user)
     } catch (error: unknown) {
@@ -65,6 +68,8 @@ export default function SignUpForm() {
           ? error.message
           : "Sign up failed. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
