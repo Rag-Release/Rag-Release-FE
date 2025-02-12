@@ -51,12 +51,40 @@ const AccountTypes: Record<AccountTypeKeys, { label: string; color: string }> =
     publisher: { label: "Publisher Account", color: "bg-purple-500" },
   };
 
+interface UpdateProfileResponse {
+  data: {
+    user: User;
+  };
+}
+
+interface UserFields {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  isEmailVerified: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  homeAddress: string;
+  deliveryAddress: string;
+  phoneNumber: string;
+  pickupPoint: string;
+  company: string;
+  fiscalCode: string;
+  cardNumber: string;
+  cardExpiry: string;
+}
+
 export default function AccountPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const authState = useAppSelector((state) => state.authReducer);
+  const authState = useAppSelector((state) => state.authReducer) as {
+    user: User | null;
+  };
 
   // Initialize local state with default empty values
-  const [userData, setUserData] = useState<User>({
+  const [userData, setUserData] = useState<UserFields>({
     id: "",
     email: "",
     firstName: "",
@@ -104,54 +132,116 @@ export default function AccountPage() {
     { id: "cardExpiry", label: "Card Expiry", type: "text" },
   ];
 
-  // Update local state when the Redux user changes
+  /**
+   * Effect hook to synchronize local user data state with Redux auth state.
+   *
+   * This hook performs the following:
+   * 1. Checks for the presence of user data in the auth state
+   * 2. Creates a default user fields object with empty/default values
+   * 3. Merges existing auth state data with default values for missing fields
+   * 4. Updates the local state while preserving any existing values
+   *
+   * The hook runs whenever authState.user changes, ensuring the local state
+   * stays in sync with the global auth state.
+   *
+   * @dependency authState.user - Redux auth state user object
+   */
   useEffect(() => {
-    if (authState.user) {
-      const user = authState.user;
-      setUserData((prev) => ({
-        ...prev,
-        id: user.id || "",
-        email: user.email || "",
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        role: user.role || "",
-        isEmailVerified: user.isEmailVerified || false,
-        isActive: user.isActive || false,
-        createdAt: user.createdAt || "",
-        updatedAt: user.updatedAt || "",
-        homeAddress: user.homeAddress || "",
-        deliveryAddress: user.deliveryAddress || "",
-        phoneNumber: user.phoneNumber || "-",
-        pickupPoint: user.pickupPoint || "",
-        company: user.company || "",
-        fiscalCode: user.fiscalCode || "",
-        cardNumber: user.cardNumber || "",
-        cardExpiry: user.cardExpiry || "",
-      }));
-    }
+    if (!authState.user) return;
+
+    const userFields: UserFields = {
+      id: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      role: "",
+      isEmailVerified: false,
+      isActive: false,
+      createdAt: "",
+      updatedAt: "",
+      homeAddress: "",
+      deliveryAddress: "",
+      phoneNumber: "-",
+      pickupPoint: "",
+      company: "",
+      fiscalCode: "",
+      cardNumber: "",
+      cardExpiry: "",
+    };
+
+    // Only update fields that have changed
+    const updatedFields = Object.keys(userFields).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]:
+          authState.user?.[key as keyof UserFields] ??
+          userFields[key as keyof UserFields],
+      }),
+      {}
+    );
+
+    setUserData((prev) => ({
+      ...prev,
+      ...updatedFields,
+    }));
   }, [authState.user]);
 
-  // Function to update the profile data
-  async function updateProfile(id: string | null, data: User): Promise<void> {
-    if (!id) {
+  /**
+   * Updates a user's profile information in the system.
+   *
+   * This asynchronous function handles the profile update process by:
+   * 1. Validating input parameters
+   * 2. Making an API call to update the profile
+   * 3. Updating the local state with the new user data
+   * 4. Managing loading states during the operation
+   *
+   * @param {string | null} id - The unique identifier of the user whose profile is being updated.
+   *                            Must be a non-empty string.
+   * @param {User} data - The user data object containing the updated profile information.
+   *                     Must be a valid object conforming to the User interface.
+   *
+   * @returns {Promise<User>} A promise that resolves to the updated user object.
+   *
+   * @throws {Error} Throws an error in the following cases:
+   *  - If the user ID is null, undefined, or empty
+   *  - If the user data is invalid or not an object
+   *  - If the server response is invalid or missing user data
+   *  - If any network or server errors occur during the update
+   *
+   */
+  async function updateProfile(id: string | null, data: User): Promise<User> {
+    // Input validation
+    if (!id?.trim()) {
       throw new Error("User ID is required to update profile.");
     }
-    setIsLoading(true);
+
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid user data provided.");
+    }
 
     try {
+      setIsLoading(true);
       const response = await AccountService.updateProfile(id, data);
-      if (!response) {
-        throw new Error("Failed to update profile.");
+
+      if (!response || !response.data?.user) {
+        throw new Error("Invalid response received from server.");
       }
 
       const updatedUser: User = response.data.user;
 
-      // Update local state only if the profile update is successful
+      // Update local state
       dispatch(setUser(updatedUser));
-      setUserData(updatedUser);
+      setUserData(updatedUser as UserFields);
+
+      return updatedUser;
     } catch (error) {
-      console.error("Error updating profile:", error);
-      throw error;
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while updating profile.";
+
+      console.error("Error updating profile:", errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setIsLoading(false);
     }
